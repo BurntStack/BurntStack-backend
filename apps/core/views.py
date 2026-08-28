@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
@@ -10,6 +10,23 @@ from rest_framework.reverse import reverse
 def health_check(request):
     """Lightweight liveness probe for load balancers / uptime monitors."""
     return Response({"status": "ok", "time": timezone.now().isoformat()})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def me(request):
+    """Who's logged in — the portal uses this to decide what to show."""
+    user = request.user
+    return Response(
+        {
+            "id": user.id,
+            "username": user.username,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "is_staff": user.is_staff,
+        }
+    )
 
 
 @api_view(["GET"])
@@ -23,6 +40,7 @@ def api_root(request, format=None):
                 "token": reverse("token_obtain_pair", request=request, format=format),
                 "refresh": reverse("token_refresh", request=request, format=format),
                 "verify": reverse("token_verify", request=request, format=format),
+                "me": reverse("me", request=request, format=format),
             },
             "contact": reverse("contact-list", request=request, format=format),
             "newsletter": reverse("newsletter-list", request=request, format=format),

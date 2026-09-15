@@ -10,8 +10,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from apps.blog.urls import portal_urlpatterns as blog_portal_urlpatterns
-from apps.core.views import api_root, health_check, me
+from apps.core.views import api_root, health_check
 
 api_patterns = [
     path("", api_root, name="api-root"),
@@ -20,18 +19,13 @@ api_patterns = [
     path("auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("auth/token/verify/", TokenVerifyView.as_view(), name="token_verify"),
-    path("auth/me/", me, name="me"),
     # Feature apps
     path("contact/", include("apps.contact.urls")),
     path("newsletter/", include("apps.newsletter.urls")),
-    path("blog/", include("apps.blog.urls")),
     path("careers/", include("apps.careers.urls")),
     path("projects/", include("apps.projects.urls")),
     path("testimonials/", include("apps.testimonials.urls")),
     path("faqs/", include("apps.faqs.urls")),
-    # Employee portal — authenticated blog CRUD, distinct from the public
-    # read-only api/blog/ above.
-    path("portal/blog/", include(blog_portal_urlpatterns)),
 ]
 
 urlpatterns = [

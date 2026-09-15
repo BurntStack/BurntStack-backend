@@ -16,8 +16,6 @@ from django.core.management.base import BaseCommand
 # Role -> {"app.model": [actions]}   actions ⊆ {add, change, delete, view}
 ROLES = {
     "Content Editors": {
-        "blog.category": ["add", "change", "delete", "view"],
-        "blog.post": ["add", "change", "delete", "view"],
         "projects.project": ["add", "change", "delete", "view"],
         "testimonials.testimonial": ["add", "change", "delete", "view"],
         "faqs.faq": ["add", "change", "delete", "view"],

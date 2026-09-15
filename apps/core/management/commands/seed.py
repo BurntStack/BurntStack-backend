@@ -4,9 +4,7 @@ Usage:  python manage.py seed
 """
 
 from django.core.management.base import BaseCommand
-from django.utils import timezone
 
-from apps.blog.models import Category, Post
 from apps.careers.models import JobOpening
 from apps.faqs.models import Faq
 from apps.projects.models import Project
@@ -21,7 +19,6 @@ class Command(BaseCommand):
         self._seed_testimonials()
         self._seed_faqs()
         self._seed_jobs()
-        self._seed_blog()
         self.stdout.write(self.style.SUCCESS("Database seeded successfully."))
 
     def _seed_projects(self):
@@ -93,25 +90,3 @@ class Command(BaseCommand):
         ]
         for item in data:
             JobOpening.objects.update_or_create(title=item["title"], defaults=item)
-
-    def _seed_blog(self):
-        eng, _ = Category.objects.get_or_create(name="Engineering")
-        ai, _ = Category.objects.get_or_create(name="AI")
-        posts = [
-            {"title": "Scaling Django to Millions of Requests", "category": eng, "is_featured": True,
-             "excerpt": "Battle-tested caching, indexing and async-worker patterns that keep Django fast under load.",
-             "tags": ["Django", "Performance", "Scaling"], "reading_time": 8},
-            {"title": "Building LLM Copilots Your Team Will Actually Use", "category": ai, "is_featured": False,
-             "excerpt": "A practical guide to shipping AI assistants that are helpful, safe and grounded in your data.",
-             "tags": ["AI", "LLM", "Product"], "reading_time": 6},
-        ]
-        for item in posts:
-            Post.objects.update_or_create(
-                title=item["title"],
-                defaults={
-                    **item,
-                    "content": "Full article content goes here.",
-                    "is_published": True,
-                    "published_at": timezone.now(),
-                },
-            )

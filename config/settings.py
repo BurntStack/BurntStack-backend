@@ -56,7 +56,6 @@ LOCAL_APPS = [
     "apps.core",
     "apps.contact",
     "apps.newsletter",
-    "apps.blog",
     "apps.careers",
     "apps.projects",
     "apps.testimonials",
